@@ -86,3 +86,4 @@ This section details the practical exploitation techniques and problem-solving m
 ## 👨‍💻 About the Author
 **Vishu_Raj**
 A dedicated cybersecurity student and active bug bounty hunter. Currently applying theoretical knowledge to practical scenarios through CTFs and vulnerability assessments.
+
