@@ -78,7 +78,7 @@ This section details the practical exploitation techniques and problem-solving m
   <img src="Screenshots/Screenshot 2026-04-25 222838.png" width="400"/>
 </p>
 <p align="center">
-  <img src="WhatsApp Image 2026-04-25 at 9.07.44 PM.png" width="400"/>
+  <img src="Screenshot 2026-05-02 042718.png" width="400"/>
 </p>
 
 ---
