@@ -1,10 +1,10 @@
 # 🏆 MythX: An Endgame Protocol CTF - Writeups
 
-**Author:** Vishu Raj  
-**Team:** Trojan_Titans  
-**Institution:** Durgapur Institute of Advanced Technology and Management (DIATM)  
+**Author:** Vishu Raj
+**Team:** Trojan_Titans
+**Institution:** Durgapur Institute of Advanced Technology and Management (DIATM)
 
-Welcome to my detailed writeups and methodology documentation for **MythX: An Endgame Protocol**, a National-Level Cybersecurity Capture The Flag (CTF) championship organized by the KIET Group of Institutions. 
+Welcome to my detailed writeups and methodology documentation for **MythX: An Endgame Protocol**, a National-Level Cybersecurity Capture The Flag (CTF) championship organized by the KIET Group of Institutions.
 
 ## 🛡️ Event Overview
 * **Event:** MythX: Cybersecurity Summit and Innovation Challenge
@@ -39,12 +39,12 @@ The challenge introduced a custom authentication system for the CTF7 staff porta
 
 **Step 1: Traffic Interception & Source Code Review**
 I began by proxying my web traffic through Burp Suite to analyze the authentication flow. Upon inspecting the HTTP history and the raw response from the root directory (`/`), I discovered a critical Information Disclosure vulnerability. The developers left a debug comment in the HTML body containing the backend signing secret:
-`<!-- debug: auth_secret=supersecretkey -->`
+``
 
 ![Burp Suite - Source Code Leak](Screenshots/Screenshot_2026-04-25_220855.png)
 
 **Step 2: Analyzing the Session Token**
-Looking at the request headers, I noticed the `session_token` cookie. The token was Base64 encoded. 
+Looking at the request headers, I noticed the `session_token` cookie. The token was Base64 encoded.
 
 **Step 3: Decoding & Forgery Preparation**
 Sending the cookie to Burp Suite's Decoder revealed a JSON object containing the user's state and a cryptographic signature:
@@ -53,7 +53,7 @@ Sending the cookie to Burp Suite's Decoder revealed a JSON object containing the
 ![Burp Suite - Cookie Decoding](Screenshots/Screenshot_2026-04-25_204612.png)
 
 **Step 4: Exploitation (Privilege Escalation)**
-Because the application uses a "homegrown" signed cookie mechanism rather than a robust JWT implementation, and because the `auth_secret` was leaked, the system is vulnerable to cookie forgery. 
+Because the application uses a "homegrown" signed cookie mechanism rather than a robust JWT implementation, and because the `auth_secret` was leaked, the system is vulnerable to cookie forgery.
 By changing the `"role": "user"` to `"role": "admin"`, and utilizing the leaked `supersecretkey` to generate a valid new hash for the `"sig"` parameter, I was able to forge an administrative session cookie, bypass access controls, and capture the flag.
 
 ---
@@ -69,7 +69,7 @@ This challenge involved investigating a directory named `Dead_Signal` containing
 Opening the `intercepted` text file revealed Stage 1 of a C2 Beacon transmitted on `2024-04-19 04:00:00 UTC`. The file contained a short ciphertext string:
 `ZPDRRNAZNALLYKEAQ`
 
-This appears to be a classic substitution cipher (such as Caesar, Vigenère, or Affine). 
+This appears to be a classic substitution cipher (such as Caesar, Vigenère, or Affine).
 
 ![Intercepted C2 Beacon](Screenshots/Screenshot_2026-04-25_203510.png)
 
