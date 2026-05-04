@@ -1,60 +1,93 @@
-# 🚀 MythX: An Endgame Protocol - CTF Writeups
+# 🏆 MythX: An Endgame Protocol CTF - Writeups
 
-![Category](https://img.shields.io/badge/Category-Cybersecurity%20CTF-blue?style=flat-square)
-![Level](https://img.shields.io/badge/Level-National-success?style=flat-square)
-![Platform](https://img.shields.io/badge/Platform-CTF7-orange?style=flat-square)
+**Author:** Vishu Raj  
+**Team:** Trojan_Titans  
+**Institution:** Durgapur Institute of Advanced Technology and Management (DIATM)  
 
-## 📋 Event Overview
-This repository contains my detailed writeups and methodologies for the challenges I solved during **MythX: An Endgame Protocol**. This was an intense, National-Level Cybersecurity Capture The Flag (CTF) competition hosted by KIET Deemed-to-be University on the CTF7 platform.
+Welcome to my detailed writeups and methodology documentation for **MythX: An Endgame Protocol**, a National-Level Cybersecurity Capture The Flag (CTF) championship organized by the KIET Group of Institutions. 
 
-The objective of this repository is to document my step-by-step approach to identifying, exploiting, and securing vulnerabilities found within the competition environments.
+## 🛡️ Event Overview
+* **Event:** MythX: Cybersecurity Summit and Innovation Challenge
+* **Platform:** CTF7
+* **Format:** Jeopardy-Style CTF
+* **Date:** March 28 - March 29, 2026
+* **Total Players:** 378 | **Total Challenges:** 51
 
----
-
-## 🛠️ Arsenal & Methodology
-To tackle the challenges in this CTF, my workflow heavily relied on manual enumeration and targeted exploitation using the following toolkit:
-* **Operating System:** Kali Linux
-* **Web Proxy & Manipulation:** Burp Suite, OWASP ZAP
-* **Automated Exploitation:** SQLMap
+MythX is a high-intensity simulation designed to test exploitation and adaptation under real-world conditions, featuring industry-inspired challenges across multiple cybersecurity domains.
 
 ---
 
-## 🚩 Challenge Writeups
+## 📜 Certificate of Participation
 
-### Challenge: [Insert Challenge Name]
-**Category:** [e.g., Web Exploitation] | **Points:** [e.g., 100]
-
-#### 1. Reconnaissance
-The challenge provided a target URL. Initial interaction with the web application revealed a standard user portal. My first step was to map the application's attack surface using Burp Suite to intercept and analyze the HTTP requests.
-
-> **Screenshot: Initial Request Interception**
-> *Replace this text with your actual screenshot from the event*
-> ![Initial Intercept](Screenshots/Screenshot_Name_1.png)
-
-#### 2. Vulnerability Discovery
-While testing the application's input fields, I noticed abnormal behavior in how the server handled specific parameters. By manipulating the request, I identified a vulnerability [Describe vulnerability, e.g., an IDOR or SQLi]. 
-
-> **Screenshot: Identifying the Vulnerability**
-> *Replace this text with your actual screenshot from the event*
-> ![Vulnerability Proof](Screenshots/Screenshot_Name_2.png)
-
-#### 3. Exploitation & Flag Capture
-I crafted a targeted payload to exploit the identified weakness. [Explain the exact payload or tool command used, e.g., routing the request through SQLMap to dump the schema]. The successful execution granted unauthorized access, allowing me to retrieve the final flag.
-
-> **Screenshot: Successful Exploitation & Flag**
-> *Replace this text with your actual screenshot from the event*
-> ![Flag Captured](Screenshots/Screenshot_Name_3.png)
-
-#### 🛡️ Mitigation Advice
-To patch this vulnerability, the developers should:
-1. Implement strict server-side input validation.
-2. [Add specific fix, e.g., Use parameterized queries to prevent SQL injection or enforce strict access control checks on every API request].
+![Vishu Raj - Certificate of Participation](Certificate/Vishu_Raj_Certificate.png)
 
 ---
 
-## 👨‍💻 Author
+## 💻 Challenge Writeups
 
-**Vishu_Raj**
-*Cybersecurity Intern @ Codec Technologies | Student at DIATM*
-* **GitHub:** [Vishu_Raj](https://github.com/Vishu_Raj)
-* **Bugcrowd:** [Vishu_Raj](https://bugcrowd.com/Vishu_Raj)
+### 1. [Web] Homegrown Authentication System
+* **Points:** 300
+* **Difficulty:** Medium
+* **Author:** Shubham Gabhale
+
+#### Challenge Description
+The challenge introduced a custom authentication system for the CTF7 staff portal. It utilized signed cookies instead of standard JWTs, granting guest access by default while reserving the admin panel for senior staff only.
+
+![Challenge Description](Screenshots/Screenshot_2026-05-02_042718.png)
+
+#### Methodology & Exploitation
+
+**Step 1: Traffic Interception & Source Code Review**
+I began by proxying my web traffic through Burp Suite to analyze the authentication flow. Upon inspecting the HTTP history and the raw response from the root directory (`/`), I discovered a critical Information Disclosure vulnerability. The developers left a debug comment in the HTML body containing the backend signing secret:
+`<!-- debug: auth_secret=supersecretkey -->`
+
+![Burp Suite - Source Code Leak](Screenshots/Screenshot_2026-04-25_220855.png)
+
+**Step 2: Analyzing the Session Token**
+Looking at the request headers, I noticed the `session_token` cookie. The token was Base64 encoded. 
+
+**Step 3: Decoding & Forgery Preparation**
+Sending the cookie to Burp Suite's Decoder revealed a JSON object containing the user's state and a cryptographic signature:
+`{"username": "guest", "role": "user", "sig": "502138887ed78468c7e7becd22823500"}`
+
+![Burp Suite - Cookie Decoding](Screenshots/Screenshot_2026-04-25_204612.png)
+
+**Step 4: Exploitation (Privilege Escalation)**
+Because the application uses a "homegrown" signed cookie mechanism rather than a robust JWT implementation, and because the `auth_secret` was leaked, the system is vulnerable to cookie forgery. 
+By changing the `"role": "user"` to `"role": "admin"`, and utilizing the leaked `supersecretkey` to generate a valid new hash for the `"sig"` parameter, I was able to forge an administrative session cookie, bypass access controls, and capture the flag.
+
+---
+
+### 2. [Crypto/Forensics] Dead_Signal
+
+#### Challenge Description
+This challenge involved investigating a directory named `Dead_Signal` containing intercepted communications, specifically a Command and Control (C2) beacon and a hex dump file.
+
+#### Methodology & Analysis
+
+**Step 1: Analyzing the C2 Beacon**
+Opening the `intercepted` text file revealed Stage 1 of a C2 Beacon transmitted on `2024-04-19 04:00:00 UTC`. The file contained a short ciphertext string:
+`ZPDRRNAZNALLYKEAQ`
+
+This appears to be a classic substitution cipher (such as Caesar, Vigenère, or Affine). 
+
+![Intercepted C2 Beacon](Screenshots/Screenshot_2026-04-25_203510.png)
+
+**Step 2: Hexadecimal Decoding**
+Next, I investigated the `deadrop.hex` file. The file contained a continuous hex string:
+`273126393b313b20352e782f712121320d3961220d39643b102c2e7d66362760332f`
+
+![Hex Dump Analysis](Screenshots/Screenshot_2026-04-25_203525.png)
+
+**Step 3: Decryption & Flag Extraction**
+*(Note: Add your specific decryption steps here—e.g., "Converting the hex string to ASCII revealed a secondary payload/clue, which, when combined with the decrypted Stage 1 beacon, yielded the final flag.")*
+
+---
+
+### 🛠️ Tools Used
+* **Burp Suite Professional:** Traffic interception, request manipulation, and Base64 decoding.
+* **Text Editors / Hex Editors:** Analyzing raw data dumps and intercepted beacon traffic.
+* **Browser DevTools:** Initial inspection and cookie management.
+
+---
+*Constantly expanding my offensive security toolkit and adapting to real-world threat scenarios.*
