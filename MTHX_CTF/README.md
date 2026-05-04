@@ -106,3 +106,4 @@ The goal of this repo is to both **share knowledge** and **showcase my skills** 
 ## 👨‍💻 About the Author
 **Vishu_Raj**
 A cybersecurity enthusiast specializing in ethical hacking and vulnerability assessments. Currently applying offensive security skills in a full professional internship, with a strong focus on bug bounty hunting, manual web exploitation, and mastering industry-standard tools.
+
