@@ -6,9 +6,13 @@ Welcome to my central repository for Capture The Flag (CTF) writeups and web exp
 
 The repository is organized by the specific CTF events I have participated in. Each directory contains detailed, step-by-step writeups, proof-of-concept (PoC) screenshots, and mitigation strategies.
 
-*   📁 **`Hack!tUp_CTF/`** - Writeups and challenges from the Hack!tUp CTF.
-*   📁 **`HackZero'26_CTF/`** - Documentation of my participation and solutions for the HackZero '26 CTF hosted by VIT Bhopal.
-*   📁 **`MTHX_CTF/`** - Comprehensive writeups for MythX: An Endgame Protocol (National-Level CTF hosted by KIET).
+* 📁 **CyberGeek_CTF_{IIIT_Allahabad}/** - Strategic writeups and tactical solutions detailing vulnerability exploitation methodologies applied during the CyberGeek CTF hosted by IIIT Allahabad.
+
+* 📁 **Hack!tUp_CTF/** - Analytical breakdowns, proof-of-concept (PoC) development, and mitigation strategies for diverse cybersecurity challenges encountered during the Hack!tUp event. *(Feel free to add the host name here if there was one!)*
+
+* 📁 **HackZero'26_CTF_{VIT_Bhopal}/** - Step-by-step documentation of challenges solved during the HackZero '26 CTF hosted by VIT Bhopal, featuring practical execution of web application security testing.
+
+* 📁 **MTHX_CTF_{KIET_Group_of_Institutions}/** - Comprehensive technical archive from the National-Level MythX: An Endgame Protocol CTF hosted by KIET, highlighting advanced web exploitation and logic flaw identification.
 
 ## 🎯 Core Focus Areas
 
